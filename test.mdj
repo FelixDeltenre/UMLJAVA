@@ -1,0 +1,29 @@
+				{
+					"_type": "UMLPackage",
+					"_id": "AAAAAAF9MlzmV/NX/Os=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Le pack",
+					"ownedElements": [
+						{
+							"_type": "UMLClass",
+							"_id": "AAAAAAF9Ml0IS/Nyzes=",
+							"_parent": {
+								"$ref": "AAAAAAF9MlzmV/NX/Os="
+							},
+							"name": "la classe une"
+						},
+						{
+							"_type": "UMLClass",
+							"_id": "AAAAAAF9Ml0cffOcoMU=",
+							"_parent": {
+								"$ref": "AAAAAAF9MlzmV/NX/Os="
+							},
+							"name": "la classe deux"
+						}
+					]
+				}
+			]
+		}
+	
