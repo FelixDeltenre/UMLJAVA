@@ -46,11 +46,27 @@ public class UML2JavaTranslator {
         }
     }
 
+    public UMLAttribute createUMLAttribute(JSONObject jsonObject) {
+        UMLAttribute umlAttribute = new UMLAttribute();
+
+        //TODO
+
+        return umlAttribute;
+    }
+
     public void createUMLClass(JSONObject jsonObject) {
         UMLClass umlClass = new UMLClass();
         umlClass.setId(jsonObject.get("_id").toString());
         umlClass.setName(jsonObject.get("name").toString());
         umlClass.setParentRef(jsonObject.getJSONObject("_parent").get("$ref").toString());
+        if (!jsonObject.getJSONObject("attributes").isEmpty()) {
+            JSONArray attributes = jsonObject.getJSONArray("attributes");
+            for (int i = 0; i < attributes.length(); ++i) {
+                attributes.get(i);
+            }
+        }
+
+
         umlObjects.add(umlClass);
     }
 
