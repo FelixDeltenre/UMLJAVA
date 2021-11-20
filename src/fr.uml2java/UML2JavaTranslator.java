@@ -1,53 +1,67 @@
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import org.json.*;
 
 public class UML2JavaTranslator {
-    private BufferedReader reader;
-    private List<UMLObject> contents;
-    private String currentLine;
+    private FileReader fileReader;
+    private JSONObject jsonObject;
+    private List<UMLObject> umlObjects = new ArrayList<>(); ;
 
-    private static List<Character> commandEndingChars = new ArrayList<Character>(Arrays.asList(
-            ',', '}', '{', '[', ']'
-    ));
-
-    public UML2JavaTranslator(String fileName) throws FileNotFoundException {
-        reader = new BufferedReader(new FileReader(fileName));
-        contents = new ArrayList<>();
-    }
-
-    public String getNextLine() {
+    public UML2JavaTranslator(String file) {
         try {
-            StringBuilder command = new StringBuilder();
-            int r;
-            while (true) {
-                r = reader.read();
-                char readChar = (char) r;
-                command.append(readChar);
-                if (commandEndingChars.contains((char) r)) {
-                    reader.read();
-                    break;
-                }
-            }
-            return command.toString().strip();
+            fileReader = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getFile() throws IOException {
+        String parsable = "";
+        int r;
+        while ((r = fileReader.read()) != -1) {
+
+            parsable += (char) r;
+        }
+        System.out.println(parsable);
+        jsonObject = new JSONObject(parsable);
+    }
+
+    public void translate() {
+        try {
+            getFile();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return null;
+            e.printStackTrace();
+        }
+        System.out.println(jsonObject);
+        JSONArray jsonArray = (JSONArray) jsonObject.get("ownedElements");
+        System.out.println(jsonArray);
+        for(int i = 0; i < jsonArray.length(); ++i) {
+            createUMLObject(jsonArray.getJSONObject(i));
+        }
+        for (UMLObject umlObject : umlObjects) {
+            System.out.println(umlObject);
         }
     }
 
-    public void createNewObject() {
-        while (true) {
-            System.out.println(getNextLine());
-        }
+    public void createUMLClass(JSONObject jsonObject) {
+        UMLClass umlClass = new UMLClass();
+        umlClass.setId(jsonObject.get("_id").toString());
+        umlClass.setName(jsonObject.get("name").toString());
+        umlClass.setParentRef(jsonObject.getJSONObject("_parent").get("$ref").toString());
+        umlObjects.add(umlClass);
     }
 
-    public void interpretFile() {
-
+    public void createUMLObject(JSONObject object) {
+        String type = object.get("_type").toString();
+        switch (type) {
+            case "UMLClass":
+                createUMLClass(object);
+                break;
+            default:
+                break;
+        }
     }
 }

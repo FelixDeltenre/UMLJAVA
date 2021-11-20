@@ -3,6 +3,15 @@ public class UMLObject {
     private String parentRef;
     private String name;
 
+    @Override
+    public String toString() {
+        return "UMLObject{" +
+                "id='" + id + '\'' +
+                ", parentRef='" + parentRef + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }
