@@ -9,7 +9,7 @@ import org.json.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         try {
-            UML2JavaTranslator uml2JavaTranslator = new UML2JavaTranslator("autretest.mdj");
+            UML2JavaTranslator uml2JavaTranslator = new UML2JavaTranslator("test_classe_attribut_operation.mdj");
             uml2JavaTranslator.translate();
         } catch (Exception e) {
             e.printStackTrace();

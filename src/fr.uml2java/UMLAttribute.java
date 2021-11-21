@@ -1,7 +1,17 @@
 public class UMLAttribute extends UMLObject {
-    private String visibility;
+    private String visibility = "public";
     private String type;
-    private String name;
+
+    @Override
+    public String toString() {
+        return "UMLAttribute{" +
+                "_id='" + getId() +  '\'' +
+                "parentRef='" + getParentRef() + '\'' +
+                "visibility='" + visibility + '\'' +
+                ", type='" + type + '\'' +
+                ", name='" + getName() + '\'' +
+                '}';
+    }
 
     public String getVisibility() {
         return visibility;
@@ -17,15 +27,5 @@ public class UMLAttribute extends UMLObject {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 }

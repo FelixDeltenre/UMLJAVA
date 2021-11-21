@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class UMLPackage {
+public class UMLPackage extends UMLObject {
     private List<UMLObject> ownedElements;
 
     public UMLPackage() {
