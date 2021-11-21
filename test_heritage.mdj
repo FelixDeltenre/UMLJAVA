@@ -1,0 +1,40 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "Untitled",
+	"ownedElements": [
+				{
+					"_type": "UMLClass",
+					"_id": "AAAAAAF9QgJO+zirKsw=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Class1",
+					"ownedElements": [
+						{
+							"_type": "UMLGeneralization",
+							"_id": "AAAAAAF9QoEyNRcNhqM=",
+							"_parent": {
+								"$ref": "AAAAAAF9QgJO+zirKsw="
+							},
+							"source": {
+								"$ref": "AAAAAAF9QgJO+zirKsw="
+							},
+							"target": {
+								"$ref": "AAAAAAF9Qj5O0zjkGdA="
+							}
+						}
+					]
+				},
+				{
+					"_type": "UMLClass",
+					"_id": "AAAAAAF9Qj5O0zjkGdA=",
+					"_parent": {
+						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
+					},
+					"name": "Class2"
+				}
+			]
+		}
+	]
+}

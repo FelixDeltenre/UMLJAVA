@@ -10,7 +10,6 @@ public class UML2JavaTranslator {
     private FileReader fileReader;
     private JSONObject jsonObject;
     private List<UMLObject> umlObjects = new ArrayList<>();
-    ;
 
     public UML2JavaTranslator(String file) {
         try {
@@ -49,8 +48,11 @@ public class UML2JavaTranslator {
     }
 
     public void setUMLObjectPart(UMLObject umlObject, JSONObject jsonObject) {
-        umlObject.setId(jsonObject.get("_id").toString());
-        umlObject.setParentRef(jsonObject.getJSONObject("_parent").get("$ref").toString());
+        umlObject.setId(jsonObject.getString("_id"));
+        umlObject.setParentRef(jsonObject.getJSONObject("_parent").getString("$ref"));
+        if (jsonObject.has("name")) {
+            umlObject.setName(jsonObject.getString("name"));
+        }
     }
 
     public UMLAttribute createUMLAttribute(JSONObject jsonObject) {
@@ -58,8 +60,7 @@ public class UML2JavaTranslator {
 
         setUMLObjectPart(umlAttribute, jsonObject);
 
-        umlAttribute.setName(jsonObject.get("name").toString());
-        umlAttribute.setType(jsonObject.get("_type").toString());
+        umlAttribute.setType(jsonObject.getString("_type"));
 
         return umlAttribute;
     }
@@ -69,13 +70,10 @@ public class UML2JavaTranslator {
 
         setUMLObjectPart(umlParameter, jsonObject);
 
-        if (jsonObject.has("name")) {
-            umlParameter.setName(jsonObject.get("name").toString());
-        }
         if (jsonObject.has("direction")) {
-            umlParameter.setDirection(jsonObject.get("direction").toString());
+            umlParameter.setDirection(jsonObject.getString("direction"));
         }
-        umlParameter.setType(jsonObject.get("type").toString());
+        umlParameter.setType(jsonObject.getString("type"));
 
 
         return umlParameter;
@@ -85,8 +83,6 @@ public class UML2JavaTranslator {
         UMLOperation umlOperation = new UMLOperation();
 
         setUMLObjectPart(umlOperation, jsonObject);
-
-        umlOperation.setName(jsonObject.get("name").toString());
 
         JSONArray parameters = jsonObject.getJSONArray("parameters");
         if (!parameters.isEmpty()) {
@@ -98,30 +94,84 @@ public class UML2JavaTranslator {
         return umlOperation;
     }
 
+    public void addGeneralization(JSONObject jsonObject) {
+
+    }
+
     public void createUMLClass(JSONObject jsonObject) {
         UMLClass umlClass = new UMLClass();
 
-        umlClass.setId(jsonObject.get("_id").toString());
-        umlClass.setName(jsonObject.get("name").toString());
-        umlClass.setParentRef(jsonObject.getJSONObject("_parent").get("$ref").toString());
+        setUMLObjectPart(umlClass, jsonObject);
 
-        JSONArray attributes = jsonObject.getJSONArray("attributes");
-        if (!attributes.isEmpty()) {
-            for (int i = 0; i < attributes.length(); ++i) {
-                umlClass.addAttribute(createUMLAttribute((JSONObject) attributes.get(i)));
+        umlClass.setId(jsonObject.getString("_id"));
+        umlClass.setParentRef(jsonObject.getJSONObject("_parent").getString("$ref"));
+
+        if (jsonObject.has("attributes")) {
+            JSONArray attributes = jsonObject.getJSONArray("attributes");
+            if (!attributes.isEmpty()) {
+                for (int i = 0; i < attributes.length(); ++i) {
+                    umlClass.addAttribute(createUMLAttribute((JSONObject) attributes.get(i)));
+                }
             }
         }
-        JSONArray operations = jsonObject.getJSONArray("operations");
-        if (!operations.isEmpty()) {
-            for (int i = 0; i < operations.length(); ++i) {
-                umlClass.addOperation(createUMLOperation(operations.getJSONObject(i)));
+
+        if (jsonObject.has("operations")) {
+            JSONArray operations = jsonObject.getJSONArray("operations");
+            if (!operations.isEmpty()) {
+                for (int i = 0; i < operations.length(); ++i) {
+                    umlClass.addOperation(createUMLOperation(operations.getJSONObject(i)));
+                }
             }
         }
+
+        if (jsonObject.has("ownedElements")) {
+            JSONArray associations = jsonObject.getJSONArray("ownedElements");
+            if (!associations.isEmpty()) {
+                for (int i = 0; i < associations.length(); ++i) {
+                    String type = associations.getJSONObject(i).getString("_type");
+
+                    switch (type) {
+                        case "UMLAssociation":
+                            umlClass.addAssociation(createUMLAssociation(associations.getJSONObject(i)));
+                            break;
+                        case "UMLGeneralization":
+                            umlClass.addGeneralization(createUMLGeneralization(associations.getJSONObject(i)));
+                            break;
+                    }
+
+
+                }
+            }
+        }
+
         umlObjects.add(umlClass);
     }
 
+    public UMLAssociationEnd createUMLAssociationEnd(JSONObject jsonObject) {
+        UMLAssociationEnd umlAssociationEnd = new UMLAssociationEnd();
+
+        setUMLObjectPart(umlAssociationEnd, jsonObject);
+
+        umlAssociationEnd.setReference(jsonObject.getJSONObject("reference").getString("$ref"));
+        umlAssociationEnd.setMultiplicity(jsonObject.getString("visibility"));
+        umlAssociationEnd.setVisibility(jsonObject.getString("visibility"));
+
+        return umlAssociationEnd;
+    }
+
+    public UMLAssociation createUMLAssociation(JSONObject jsonObject) {
+        UMLAssociation umlAssociation = new UMLAssociation();
+
+        setUMLObjectPart(umlAssociation, jsonObject);
+
+        umlAssociation.setEnd1(createUMLAssociationEnd(jsonObject.getJSONObject("end1")));
+        umlAssociation.setEnd2(createUMLAssociationEnd(jsonObject.getJSONObject("end2")));
+
+        return umlAssociation;
+    }
+
     public void createUMLObject(JSONObject object) {
-        String type = object.get("_type").toString();
+        String type = object.getString("_type");
         switch (type) {
             case "UMLClass":
                 createUMLClass(object);
