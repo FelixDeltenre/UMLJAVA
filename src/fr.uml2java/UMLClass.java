@@ -5,6 +5,9 @@ public class UMLClass extends UMLObject {
     private List<UMLAttribute> attributeList;
     private List<UMLOperation> operationsList;
     private List<UMLAssociation> associationList;
+    private List<String> motherClasses;
+    private List<String> dependenciesIDList;
+    private List<String> interfacesRealizations;
 
     @Override
     public String toString() {
@@ -15,6 +18,9 @@ public class UMLClass extends UMLObject {
                 ", attributeList=" + attributeList +
                 ", operationsList=" + operationsList +
                 ", associationList=" + associationList +
+                ", motherClasses=" + motherClasses +
+                ", dependencies=" + dependenciesIDList +
+                ", interfacesRealization=" + interfacesRealizations +
                 '}';
     }
 
@@ -22,6 +28,9 @@ public class UMLClass extends UMLObject {
         attributeList = new ArrayList<>();
         operationsList = new ArrayList<>();
         associationList = new ArrayList<>();
+        motherClasses = new ArrayList<>();
+        dependenciesIDList = new ArrayList<>();
+        interfacesRealizations = new ArrayList<>();
     }
 
     public List<UMLAttribute> getAttributeList() {
@@ -36,6 +45,18 @@ public class UMLClass extends UMLObject {
         return associationList;
     }
 
+    public List<String> getMotherClasses() {
+        return motherClasses;
+    }
+
+    public List<String> getDependenciesIDList() {
+        return dependenciesIDList;
+    }
+
+    public List<String> getInterfacesRealizations() {
+        return interfacesRealizations;
+    }
+
     public void addAttribute(UMLAttribute umlAttribute) {
         attributeList.add(umlAttribute);
     }
@@ -46,5 +67,17 @@ public class UMLClass extends UMLObject {
 
     public void addAssociation(UMLAssociation umlAssociation) {
         associationList.add(umlAssociation);
+    }
+
+    public void addGeneralization(String motherClass) {
+        this.motherClasses.add(motherClass);
+    }
+
+    public void addDependency(String classId) {
+        this.dependenciesIDList.add(classId);
+    }
+
+    public void addInterfaceRealization(String interfaceId) {
+        this.interfacesRealizations.add(interfaceId);
     }
 }

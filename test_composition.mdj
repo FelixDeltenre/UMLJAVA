@@ -1,0 +1,48 @@
+{
+	"_type": "Project",
+	"_id": "AAAAAAFF+h6SjaM2Hec=",
+	"name": "Untitled",
+	"ownedElements": [
+		{
+            "name": "Class1",
+            "ownedElements": [
+                {
+                    "_type": "UMLAssociation",
+                    "_id": "AAAAAAF9Tfd3OanUTTY=",
+                    "_parent": {
+                        "$ref": "AAAAAAF9QgJO+zirKsw="
+                    },
+                    "end1": {
+                        "_type": "UMLAssociationEnd",
+                        "_id": "AAAAAAF9Tfd3OqnVqkM=",
+                        "_parent": {
+                            "$ref": "AAAAAAF9Tfd3OanUTTY="
+                        },
+                        "reference": {
+                            "$ref": "AAAAAAF9QgJO+zirKsw="
+                        }
+                    },
+                    "end2": {
+                        "_type": "UMLAssociationEnd",
+                        "_id": "AAAAAAF9Tfd3OqnWAqE=",
+                        "_parent": {
+                            "$ref": "AAAAAAF9Tfd3OanUTTY="
+                        },
+                        "reference": {
+                            "$ref": "AAAAAAF9Qj5O0zjkGdA="
+                        },
+                        "aggregation": "composite"
+                    }
+                }
+            ]
+        },
+        {
+            "_type": "UMLClass",
+            "_id": "AAAAAAF9Qj5O0zjkGdA=",
+            "_parent": {
+                "$ref": "AAAAAAFF+qBWK6M3Z8Y="
+            },
+            "name": "Class2"
+        }
+    ]
+}

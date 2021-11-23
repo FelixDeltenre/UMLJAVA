@@ -40,7 +40,7 @@ public class UML2JavaTranslator {
         JSONArray jsonArray = (JSONArray) jsonObject.get("ownedElements");
         System.out.println(jsonArray);
         for (int i = 0; i < jsonArray.length(); ++i) {
-            createUMLObject(jsonArray.getJSONObject(i));
+            createUMLClasses(jsonArray.getJSONObject(i));
         }
         for (UMLObject umlObject : umlObjects) {
             System.out.println(umlObject);
@@ -84,21 +84,30 @@ public class UML2JavaTranslator {
 
         setUMLObjectPart(umlOperation, jsonObject);
 
-        JSONArray parameters = jsonObject.getJSONArray("parameters");
-        if (!parameters.isEmpty()) {
-            for (int i = 0; i < parameters.length(); ++i) {
-                umlOperation.addParameter(createUMLParameter((JSONObject) parameters.get(i)));
+        if (jsonObject.has("parameters")) {
+            JSONArray parameters = jsonObject.getJSONArray("parameters");
+            if (!parameters.isEmpty()) {
+                for (int i = 0; i < parameters.length(); ++i) {
+                    umlOperation.addParameter(createUMLParameter((JSONObject) parameters.get(i)));
+                }
             }
         }
-
         return umlOperation;
     }
 
-    public void addGeneralization(JSONObject jsonObject) {
-
+    public String createUMLGeneralization(JSONObject jsonObject) {
+        return jsonObject.getJSONObject("target").getString("$ref");
     }
 
-    public void createUMLClass(JSONObject jsonObject) {
+    public String createUMLDependency(JSONObject jsonObject) {
+        return jsonObject.getJSONObject("target").getString("$ref");
+    }
+
+    public String createUMLInterfaceRealization(JSONObject jsonObject) {
+        return jsonObject.getJSONObject("target").getString("$ref");
+    }
+
+    public UMLClass createUMLClass(JSONObject jsonObject) {
         UMLClass umlClass = new UMLClass();
 
         setUMLObjectPart(umlClass, jsonObject);
@@ -129,22 +138,21 @@ public class UML2JavaTranslator {
             if (!associations.isEmpty()) {
                 for (int i = 0; i < associations.length(); ++i) {
                     String type = associations.getJSONObject(i).getString("_type");
-
                     switch (type) {
-                        case "UMLAssociation":
-                            umlClass.addAssociation(createUMLAssociation(associations.getJSONObject(i)));
-                            break;
-                        case "UMLGeneralization":
-                            umlClass.addGeneralization(createUMLGeneralization(associations.getJSONObject(i)));
-                            break;
+                        case "UMLAssociation"
+                                -> umlClass.addAssociation(createUMLAssociation(associations.getJSONObject(i)));
+                        case "UMLGeneralization"
+                                -> umlClass.addGeneralization(createUMLGeneralization(associations.getJSONObject(i)));
+                        case "UMLDependency"
+                                -> umlClass.addDependency(createUMLDependency(associations.getJSONObject(i)));
+                        case "UMLInterfaceRealization"
+                                -> umlClass.addInterfaceRealization(createUMLInterfaceRealization(associations.getJSONObject(i)));
                     }
-
-
                 }
             }
         }
 
-        umlObjects.add(umlClass);
+        return umlClass;
     }
 
     public UMLAssociationEnd createUMLAssociationEnd(JSONObject jsonObject) {
@@ -164,18 +172,30 @@ public class UML2JavaTranslator {
 
         setUMLObjectPart(umlAssociation, jsonObject);
 
+        if (jsonObject.has("aggregation")) {
+            umlAssociation.setAggregation(jsonObject.getString("aggregation"));
+        }
+
         umlAssociation.setEnd1(createUMLAssociationEnd(jsonObject.getJSONObject("end1")));
         umlAssociation.setEnd2(createUMLAssociationEnd(jsonObject.getJSONObject("end2")));
 
         return umlAssociation;
     }
 
-    public void createUMLObject(JSONObject object) {
+    public UMLInterface createUMLInterface(JSONObject jsonObject) {
+        UMLInterface umlInterface = (UMLInterface) createUMLClass(jsonObject);
+
+        return umlInterface;
+    }
+
+    public void createUMLClasses(JSONObject object) {
         String type = object.getString("_type");
         switch (type) {
             case "UMLClass":
-                createUMLClass(object);
+                this.umlObjects.add(createUMLClass(object));
                 break;
+            case "UMLInterface":
+                this.umlObjects.add(createUMLInterface(object));
             default:
                 break;
         }
