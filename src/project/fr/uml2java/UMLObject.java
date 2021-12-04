@@ -10,7 +10,11 @@ public class UMLObject {
 
     public UMLObject(JSONObject jsonObject) {
         this.id = jsonObject.getString("_id");
-        this.parentRef = jsonObject.getJSONObject("_parent").getString("$ref");
+
+        if (jsonObject.has("_parent")) {
+            this.parentRef = jsonObject.getJSONObject("_parent").getString("$ref");
+        }
+
 
         if (jsonObject.has("name")) {
             this.name = jsonObject.getString("name");

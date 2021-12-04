@@ -3,15 +3,13 @@ package fr.uml2java;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.json.*;
 
 public class UML2JavaTranslator {
     private FileReader fileReader;
-    private JSONObject jsonObject;
-    private List<UMLObject> umlObjects = new ArrayList<>();
+    private JSONObject jsonFile;
+    private UMLProject project;
 
     public UML2JavaTranslator(String file) {
         try {
@@ -22,21 +20,26 @@ public class UML2JavaTranslator {
     }
 
     public void getFile() throws IOException {
-        String parsable = "";
+        StringBuilder parsable = new StringBuilder();
         int r;
         while ((r = fileReader.read()) != -1) {
 
-            parsable += (char) r;
+            parsable.append((char) r);
         }
         System.out.println(parsable);
-        jsonObject = new JSONObject(parsable);
+        jsonFile = new JSONObject(parsable.toString());
     }
 
     public void translate() {
         try {
-            getFile();
+            this.getFile();
+            this.project = new UMLProject(jsonFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public UMLProject getProject() {
+        return project;
     }
 }

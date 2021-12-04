@@ -14,8 +14,8 @@ public class UMLAssociationEnd extends UMLAttribute {
     @Override
     public String toString() {
         return "UMLAssociationEnd{" +
+                "value={" + super.toString() +
                 ", reference='" + reference + '\'' +
-                ", value={" + super.toString() +
                 '}';
     }
 
