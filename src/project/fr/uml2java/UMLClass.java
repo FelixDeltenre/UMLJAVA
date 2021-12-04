@@ -7,19 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UMLClass extends UMLObject {
-    private String type;
     private boolean _abstract = false;
     private List<UMLAttribute> attributeList;
     private List<UMLOperation> operationsList;
     private List<UMLAssociation> associationList;
-    private List<String> motherClasses;
+    private List<UMLGeneralization> generalizationList;
     private List<String> dependenciesIDList;
-    private List<String> implementedInterfaces;
+    private List<UMLInterfaceRealization> implementedInterfaces;
 
     public UMLClass(JSONObject jsonObject) {
         super(jsonObject);
-
-        this.type = jsonObject.getString("_type");
 
         if (jsonObject.has("isAbstract")) {
             this.setAbstract();
@@ -53,14 +50,14 @@ public class UMLClass extends UMLObject {
                     if (this.implementedInterfaces == null) {
                         this.implementedInterfaces = new ArrayList<>();
                     }
-                    this.implementedInterfaces.add(ownedElement.getJSONObject("target").getString("$ref"));
+                    this.implementedInterfaces.add(new UMLInterfaceRealization(ownedElement));
                 } else if (ownedElement.has("UMLDependency")) {
                     // TODO
                 } else {
-                    if (this.motherClasses == null) {
-                        this.motherClasses = new ArrayList<>();
+                    if (this.generalizationList == null) {
+                        this.generalizationList = new ArrayList<>();
                     }
-                    this.motherClasses.add(ownedElement.getJSONObject("target").getString("$ref"));
+                    this.generalizationList.add(new UMLGeneralization(ownedElement));
                 }
             }
         }
@@ -77,7 +74,7 @@ public class UMLClass extends UMLObject {
                 ", attributeList=" + attributeList +
                 ", operationsList=" + operationsList +
                 ", associationList=" + associationList +
-                ", motherClasses=" + motherClasses +
+                ", motherClasses=" + generalizationList +
                 ", dependenciesIDList=" + dependenciesIDList +
                 ", implementedInterfaces=" + implementedInterfaces +
                 '}';
@@ -95,16 +92,8 @@ public class UMLClass extends UMLObject {
         return associationList;
     }
 
-    public List<String> getMotherClasses() {
-        return motherClasses;
-    }
-
     public List<String> getDependenciesIDList() {
         return dependenciesIDList;
-    }
-
-    public List<String> getImplementedInterfaces() {
-        return implementedInterfaces;
     }
 
     public Boolean isAbstract() {
@@ -127,15 +116,15 @@ public class UMLClass extends UMLObject {
         associationList.add(umlAssociation);
     }
 
-    public void addGeneralization(String motherClass) {
-        this.motherClasses.add(motherClass);
+    public void addGeneralization(UMLGeneralization generalization) {
+        this.generalizationList.add(generalization);
     }
 
     public void addDependency(String classId) {
         this.dependenciesIDList.add(classId);
     }
 
-    public void addInterfaceRealization(String interfaceId) {
-        this.implementedInterfaces.add(interfaceId);
+    public void addInterfaceRealization(UMLInterfaceRealization umlInterfaceRealization) {
+        this.implementedInterfaces.add(umlInterfaceRealization);
     }
 }
