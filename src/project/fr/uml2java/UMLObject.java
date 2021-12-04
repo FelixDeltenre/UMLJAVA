@@ -15,7 +15,6 @@ public class UMLObject {
             this.parentRef = jsonObject.getJSONObject("_parent").getString("$ref");
         }
 
-
         if (jsonObject.has("name")) {
             this.name = jsonObject.getString("name");
         }

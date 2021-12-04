@@ -2,6 +2,7 @@ package fr.uml2java;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.json.*;
@@ -10,6 +11,7 @@ public class UML2JavaTranslator {
     private FileReader fileReader;
     private JSONObject jsonFile;
     private UMLProject project;
+    private FileWriter fileWriter;
 
     public UML2JavaTranslator(String file) {
         try {

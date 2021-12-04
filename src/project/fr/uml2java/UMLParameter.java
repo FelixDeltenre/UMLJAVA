@@ -9,8 +9,11 @@ public class UMLParameter extends UMLObject {
     public UMLParameter(JSONObject jsonObject) {
         super(jsonObject);
 
-        this.direction = jsonObject.getString("direction");
         if (jsonObject.has("direction")) {
+            this.direction = jsonObject.getString("direction");
+        }
+
+        if (jsonObject.has("type")) {
             this.type = jsonObject.getString("type");
         }
     }

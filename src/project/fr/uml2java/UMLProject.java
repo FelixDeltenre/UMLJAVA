@@ -37,7 +37,7 @@ public class UMLProject extends UMLObject {
         return "UMLProject{" +
                 "id='" + getId() + '\'' +
                 ", name='" + getName() + '\'' +
-                "ownedElements=" + ownedElements +
+                ", ownedElements=" + ownedElements +
                 "}";
     }
 }
