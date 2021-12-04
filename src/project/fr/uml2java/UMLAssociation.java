@@ -1,7 +1,18 @@
+package fr.uml2java;
+
+import org.json.JSONObject;
+
 public class UMLAssociation extends UMLObject {
     private UMLAssociationEnd end1;
     private UMLAssociationEnd end2;
-    private String aggregation; // Either null, either composite, either shared
+
+    public UMLAssociation(JSONObject jsonObject) {
+        super(jsonObject);
+
+        this.end1 = new UMLAssociationEnd(jsonObject.getJSONObject("end1"));
+
+        this.end2 = new UMLAssociationEnd(jsonObject.getJSONObject("end2"));
+    }
 
     @Override
     public String toString() {
@@ -11,7 +22,6 @@ public class UMLAssociation extends UMLObject {
                 ", name='" + getName() + '\'' +
                 ", end1=" + end1 +
                 ", end2=" + end2 +
-                ", aggregation=" + aggregation +
                 '}';
     }
 
@@ -29,13 +39,5 @@ public class UMLAssociation extends UMLObject {
 
     public void setEnd2(UMLAssociationEnd end2) {
         this.end2 = end2;
-    }
-
-    public String getAggregation() {
-        return aggregation;
-    }
-
-    public void setAggregation(String aggregation) {
-        this.aggregation = aggregation;
     }
 }

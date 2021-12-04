@@ -1,14 +1,28 @@
+package fr.uml2java;
+
+import org.json.JSONObject;
+
 public class UMLParameter extends UMLObject {
     private String type;
     private String direction;
+
+    public UMLParameter(JSONObject jsonObject) {
+        super(jsonObject);
+
+        this.direction = jsonObject.getString("direction");
+        if (jsonObject.has("direction")) {
+            this.type = jsonObject.getString("type");
+        }
+    }
 
     @Override
     public String toString() {
         return "UMLParameter{" +
                 "_id='" + getId() + '\'' +
-                "parentRef='" + getParentRef() + '\'' +
-                "name='" + getName() + '\'' +
-                "type='" + type + '\'' +
+                ", parentRef='" + getParentRef() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", visibility='" + getVisibility() + '\'' +
+                ", type='" + type + '\'' +
                 ", direction='" + direction + '\'' +
                 '}';
     }

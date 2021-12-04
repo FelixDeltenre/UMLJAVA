@@ -1,3 +1,5 @@
+package fr.uml2java;
+
 import java.util.ArrayList;
 import java.util.List;
 
