@@ -3,7 +3,6 @@ package fr.uml2java;
 import org.json.JSONObject;
 
 public class UMLAttribute extends UMLObject {
-    private String visibility = "public";
     private boolean _static = false;
     private String multiplicity = "1";
     private boolean readOnly = false;
@@ -60,14 +59,6 @@ public class UMLAttribute extends UMLObject {
                 ", type='" + type + '\'' +
                 ", aggregation='" + aggregation +
                 '}';
-    }
-
-    public String getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
     }
 
     public String getType() {
