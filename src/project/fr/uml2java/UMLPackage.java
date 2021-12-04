@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UMLPackage extends UMLObject {
-    private List<UMLObject> ownedElements;
+    private final List<UMLObject> ownedElements;
 
     public UMLPackage(JSONObject jsonObject) {
         super(jsonObject);
@@ -19,6 +19,7 @@ public class UMLPackage extends UMLObject {
             JSONObject ownedElem = ownedElems.getJSONObject(i);
             switch (ownedElem.getString("_type")) {
                 case "UMLClass" -> this.ownedElements.add(new UMLClass(ownedElem));
+                case "UMLInterface" -> this.ownedElements.add(new UMLInterface(ownedElem));
                 default -> {
                 }
             }
